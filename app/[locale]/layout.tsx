@@ -10,7 +10,7 @@ export default function LocaleLayout({
   params: { locale },
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: any };
 }) {
   return <LocaleLayoutClient locale={locale}>{children}</LocaleLayoutClient>;
 }

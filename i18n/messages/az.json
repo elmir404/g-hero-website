@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Ana səhifə",
+    "philosophy": "Fəlsəfə",
+    "mission": "Missiya",
+    "vision": "Vizyon",
+    "values": "Əsas dəyərlər",
+    "domains": "Biznes sahələri",
+    "about": "Haqqımızda",
+    "contact": "Əlaqə"
+  },
+  "hero": {
+    "companyName": "G-Hero Company",
+    "tagline": "Yapon keyfiyyətini dünyaya, dünyanın imkanlarını Yaponiyaya",
+    "description": "G-Hero Company Yaponiyanı dünya ilə birləşdirən qlobal IT və həllər körpüsüdür, innovativ xidmətlər vasitəsilə yeni dəyər yaratmağa həsr olunmuşdur.",
+    "ctaPrimary": "Bizimlə əlaqə",
+    "ctaSecondary": "Xidmətlərə bax"
+  },
+  "philosophy": {
+    "title": "Fəlsəfə",
+    "content": "G-Hero Company beynəlxalq cəmiyyətdə yeni dəyər yaratmağı öz missiyası hesab edir və \"Yapon keyfiyyətini dünyaya, dünyanın imkanlarını Yaponiyaya\" çatdıran körpü olmaq məqsədi ilə təsis edilmişdir. Müxtəlif biznes sahələrimiz vasitəsilə müştərilərimizin, tərəfdaş şirkətlərin və yerli icmaların inkişafına töhfə verir, davamlı və etibarlı qlobal şirkət kimi böyüməyə çalışırıq."
+  },
+  "mission": {
+    "title": "Missiya",
+    "content": "Ölkələri, insanları, biznesləri və imkanları birləşdirən bir \"körpü\" olmaq. Yüksək keyfiyyətə və səmimi əməkdaşlığa əsaslanaraq beynəlxalq bazarda yeni dəyərlər və gələcək imkanlar yaradırıq."
+  },
+  "vision": {
+    "title": "Vizyon",
+    "items": [
+      "Asiyanı təmsil edən çoxşaxəli qlobal korporativ qrupa çevrilmək.",
+      "Yapon texnologiyasını, mədəniyyətini və xidmətlərini dünyaya tanıtmaq və onların dəyərini maksimuma çatdırmaq.",
+      "Yaponiya və xarici ölkələrin şirkətlərini, investorlarını və peşəkar kadrlarını birləşdirərək hər iki tərəf üçün optimal mühit yaratmaq.",
+      "Daim dəyişən beynəlxalq bazarda yenilikçi və etibarlı tərəfdaş olaraq qalmaq."
+    ]
+  },
+  "values": {
+    "title": "Əsas dəyərlər",
+    "items": [
+      {
+        "name": "Dürüstlük (Integrity)",
+        "description": "Biznesimizi qanunlara tam riayət etməklə, şəffaflıq və dürüstlüyü hər şeydən üstün tutaraq həyata keçiririk."
+      },
+      {
+        "name": "Keyfiyyət (Quality)",
+        "description": "\"Yapon standartı\"nı qlobal miqyasda tətbiq edir və fəaliyyət göstərdiyimiz bütün sahələrdə ən yüksək keyfiyyəti təqdim edirik."
+      },
+      {
+        "name": "İnnovasiya (Innovation)",
+        "description": "Mövcud çərçivələri aşaraq daim yeni dəyərlər və biznes modelləri yaradırıq."
+      },
+      {
+        "name": "Qlobal düşüncə tərzi (Global Mindset)",
+        "description": "Multikultural anlayış və beynəlxalq baxış bucağından istifadə edərək sərhədləri aşan əməkdaşlıqlar qururuq."
+      },
+      {
+        "name": "Müştəri dəyəri (Customer Success)",
+        "description": "Müştərilərimizin uğurunu şirkətimizin inkişafının əsas mənbəyi hesab edirik."
+      }
+    ]
+  },
+  "domains": {
+    "title": "Biznes sahələri",
+    "subtitle": "Şirkətimizin əsas fəaliyyət sahələri:",
+    "items": [
+      "Yerli və xarici investorların cəlbi və hüquqi konsaltinq",
+      "Qida məhsullarının topdan və pərakəndə satışı, idxal və ixracı",
+      "Elektron kommersiya (EC saytların idarə edilməsi)",
+      "Logistika xidmətlərinin planlaşdırılması və idarə edilməsi",
+      "Yapon istehsalı kosmetikanın ixracı və satışı",
+      "Səyahət və turizm xidmətləri",
+      "Avtomobillərin alqı-satqısı, lizinqi və icarəsi",
+      "Daşınmaz əmlakın alqı-satqısı, vasitəçiliyi və idarə edilməsi",
+      "Xaricdə təhsil və təhsil xidmətləri",
+      "IT mühəndislərinin və ixtisaslı kadrların beynəlxalq mübadiləsi və yerləşdirilməsi",
+      "Otel və yaşayış məkanlarının rezervasiyası və idarə olunması",
+      "Yaşayış üçün icarə (minpaku) və sadələşdirilmiş yerləşdirmə fəaliyyəti",
+      "İctimai iaşə obyektlərinin (kafe və restoranlar) konsepsiyası və idarə olunması",
+      "Spirtli içkilərin idxalı və satışı",
+      "Yuxarıdakı sahələrlə əlaqəli bütün yardımçı fəaliyyətlər"
+    ]
+  },
+  "about": {
+    "title": "G-Hero Company haqqında",
+    "content": "G-Hero Company Yaponiyada yerləşən qlobal IT və çoxşaxəli biznes körpüsü şirkətidir. Beynəlxalq perspektivləri Yapon keyfiyyət standartları ilə birləşdirərək müştərilərimizə və tərəfdaşlarımıza optimal həllər təqdim edirik."
+  },
+  "contact": {
+    "title": "Əlaqə",
+    "subtitle": "Sual və sorğularınız üçün bizimlə əlaqə saxlamaktan çekinməyin.",
+    "form": {
+      "name": "Ad",
+      "email": "E-poçt",
+      "company": "Şirkət",
+      "message": "Mesaj",
+      "submit": "Göndər"
+    },
+    "info": {
+      "address": "Çiyoda-ku, Tokio, Yaponiya",
+      "phone": "+81-3-0000-0000",
+      "email": "info@g-hero-company.com"
+    }
+  }
+}
+

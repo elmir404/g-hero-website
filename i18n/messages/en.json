@@ -1,0 +1,103 @@
+{
+  "nav": {
+    "home": "Home",
+    "philosophy": "Philosophy",
+    "mission": "Mission",
+    "vision": "Vision",
+    "values": "Core Values",
+    "domains": "Business Domains",
+    "about": "About",
+    "contact": "Contact"
+  },
+  "hero": {
+    "companyName": "G-Hero Company",
+    "tagline": "Japanese Quality to the World, Global Potential to Japan",
+    "description": "G-Hero Company is a global IT & solutions bridge connecting Japan and the world, dedicated to creating new value through innovative services.",
+    "ctaPrimary": "Contact Us",
+    "ctaSecondary": "View Services"
+  },
+  "philosophy": {
+    "title": "Philosophy",
+    "content": "G-Hero Company Co., Ltd. was founded with the mission of creating new value in the international community and with the aim of becoming a bridge that delivers \"Japanese quality to the world, and the world's potential to Japan\". Through our diverse business domains, we contribute to the growth of our customers, partner companies, and local communities, striving to grow as a sustainable and trusted global company."
+  },
+  "mission": {
+    "title": "Mission",
+    "content": "To become a \"bridge\" that connects countries, people, businesses, and opportunities. Based on reliable quality and sincere service, we create new value and future in the global market."
+  },
+  "vision": {
+    "title": "Vision",
+    "items": [
+      "Grow into a leading diversified global corporate group representing Asia.",
+      "Promote Japan's technology, culture, and services to the world and maximize their value.",
+      "Connect Japanese and overseas companies, investors, and talent to create the best environment for both sides.",
+      "Remain an innovative and trusted partner in the ever-changing global market."
+    ]
+  },
+  "values": {
+    "title": "Core Values",
+    "items": [
+      {
+        "name": "Integrity",
+        "description": "We conduct our business with transparency and integrity, in full compliance with laws and regulations."
+      },
+      {
+        "name": "Quality",
+        "description": "We expand \"Japanese standards\" globally and deliver top quality in every business we operate."
+      },
+      {
+        "name": "Innovation",
+        "description": "We go beyond existing frameworks to constantly create new value and business models."
+      },
+      {
+        "name": "Global Mindset",
+        "description": "We leverage multicultural understanding and global awareness to enable cross-border collaboration."
+      },
+      {
+        "name": "Customer Success",
+        "description": "We believe our growth comes from the success of our customers."
+      }
+    ]
+  },
+  "domains": {
+    "title": "Business Domains",
+    "subtitle": "Our core business domains include:",
+    "items": [
+      "Attraction of domestic and overseas investors and legal consulting",
+      "Wholesale, retail, import and export of food products",
+      "E-commerce (EC site operation)",
+      "Logistics planning and operations",
+      "Export sales of Japanese cosmetics",
+      "Travel and tourism services",
+      "Automobile sales, leasing, and rental",
+      "Real estate sales, brokerage, and management",
+      "Overseas study support and education services",
+      "International exchange and dispatch of IT engineers and specialists",
+      "Hotel and accommodation booking and operations",
+      "Private lodging (minpaku) and simplified lodging business",
+      "Planning and operation of restaurants (cafes and restaurants)",
+      "Import and sales of alcoholic beverages",
+      "All related and ancillary businesses"
+    ]
+  },
+  "about": {
+    "title": "About G-Hero Company",
+    "content": "G-Hero Company is a Japan-based global IT & multi-business bridge company. We combine international perspectives with Japanese quality standards to deliver optimal solutions to our clients and partners."
+  },
+  "contact": {
+    "title": "Contact",
+    "subtitle": "Please feel free to contact us with any questions or inquiries.",
+    "form": {
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "message": "Message",
+      "submit": "Send Message"
+    },
+    "info": {
+      "address": "Chiyoda-ku, Tokyo, Japan",
+      "phone": "+81-3-0000-0000",
+      "email": "info@g-hero-company.com"
+    }
+  }
+}
+

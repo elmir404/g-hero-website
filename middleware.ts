@@ -5,10 +5,11 @@ import { locales, defaultLocale } from './i18n/config';
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
-  // Skip static files and API routes
+  // Skip static files, API routes, and admin routes
   if (
     pathname.startsWith('/_next') ||
     pathname.startsWith('/api') ||
+    pathname.startsWith('/admin') ||
     pathname.includes('.') ||
     pathname.startsWith('/favicon.ico')
   ) {
@@ -33,8 +34,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    // Skip all internal paths (_next)
-    '/((?!_next|api|favicon.ico|.*\\..*).*)',
+    // Skip all internal paths (_next), API routes, and admin routes
+    '/((?!_next|api|admin|favicon.ico|.*\\..*).*)',
   ],
 };
 

@@ -1,0 +1,134 @@
+@model IEnumerable<GHeroWebsite.Domain.Entities.ContentSection>
+@{
+    ViewData["Title"] = "Content Management";
+    Layout = "_Layout";
+}
+
+<div class="min-h-screen bg-gray-50 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="mb-8 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Content Management</h1>
+                <p class="mt-2 text-gray-600">Manage page content sections</p>
+            </div>
+            <div class="flex space-x-3">
+                <a href="/Dashboard" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                    ← Back to Dashboard
+                </a>
+                <a href="/Admin/Content/Edit?lang=@ViewBag.CurrentLanguage" class="px-4 py-2 bg-sakura-600 text-white rounded-lg hover:bg-sakura-700 transition-colors">
+                    + Add New Section
+                </a>
+            </div>
+        </div>
+
+        <!-- Language Filter -->
+        <div class="mb-6 flex items-center space-x-2">
+            <span class="text-sm font-medium text-gray-700">Filter by Language:</span>
+            @foreach (var lang in (string[])ViewBag.AvailableLanguages)
+            {
+                <a href="/Admin/Content?lang=@lang" 
+                   class="px-3 py-1 rounded-md text-sm font-medium transition-all @(ViewBag.CurrentLanguage == lang ? "bg-sakura-600 text-white" : "bg-gray-200 text-gray-700 hover:bg-gray-300")">
+                    @(lang == "jp" ? "日本語" : lang.ToUpper())
+                </a>
+            }
+        </div>
+
+        <div class="bg-white shadow rounded-lg overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Section Key</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Language</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Updated</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        @foreach (var contentSection in Model)
+                        {
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">@contentSection.SectionKey</div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                        @(contentSection.LanguageCode == "jp" ? "日本語" : contentSection.LanguageCode.ToUpper())
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">@(contentSection.Title ?? "-")</div>
+                                    @if (!string.IsNullOrEmpty(contentSection.Subtitle))
+                                    {
+                                        <div class="text-sm text-gray-500">@contentSection.Subtitle.Substring(0, Math.Min(50, contentSection.Subtitle.Length))...</div>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">@contentSection.DisplayOrder</td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    @if (contentSection.IsActive)
+                                    {
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Inactive</span>
+                                    }
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    @contentSection.UpdatedAt.ToString("MMM dd, yyyy")
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                                    <a href="/Admin/Content/Edit/@contentSection.Id" class="text-sakura-600 hover:text-sakura-900">Edit</a>
+                                    <form asp-action="ToggleActive" method="post" asp-route-id="@contentSection.Id" class="inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="text-blue-600 hover:text-blue-900">
+                                            @(contentSection.IsActive ? "Deactivate" : "Activate")
+                                        </button>
+                                    </form>
+                                    <form asp-action="Delete" method="post" asp-route-id="@contentSection.Id" class="inline" onsubmit="return confirm('Are you sure you want to delete this section?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        @if (!Model.Any())
+                        {
+                            <tr>
+                                <td colspan="7" class="px-6 py-4 text-center text-gray-500">
+                                    No content sections found for this language. <a href="/Admin/Content/Edit?lang=@ViewBag.CurrentLanguage" class="text-sakura-600 hover:text-sakura-900">Create one</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="mt-8 bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-blue-900 mb-2">Common Section Keys:</h3>
+            <div class="text-sm text-blue-800 space-y-1">
+                <div><strong>hero.title</strong> - Hero section title</div>
+                <div><strong>hero.tagline</strong> - Hero tagline</div>
+                <div><strong>hero.description</strong> - Hero description</div>
+                <div><strong>philosophy.title</strong> - Philosophy section title</div>
+                <div><strong>philosophy.content</strong> - Philosophy content</div>
+                <div><strong>mission.title</strong> - Mission section title</div>
+                <div><strong>mission.content</strong> - Mission content</div>
+                <div><strong>vision.title</strong> - Vision section title</div>
+                <div><strong>vision.items</strong> - Vision items (JSON array in AdditionalData)</div>
+                <div><strong>values.title</strong> - Core Values title</div>
+                <div><strong>values.items</strong> - Values items (JSON array in AdditionalData)</div>
+                <div><strong>domains.title</strong> - Business Domains title</div>
+                <div><strong>domains.subtitle</strong> - Business Domains subtitle</div>
+                <div><strong>domains.items</strong> - Domain items (JSON array in AdditionalData)</div>
+                <div><strong>about.title</strong> - About section title</div>
+                <div><strong>about.content</strong> - About content</div>
+            </div>
+        </div>
+    </div>
+</div>
+

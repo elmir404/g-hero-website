@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Login";
+    Layout = "_Layout";
+}
+
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-sakura-50 to-teal-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Admin Login
+            </h2>
+        </div>
+        <form class="mt-8 space-y-6" asp-controller="Account" asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+            
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <p>@error.ErrorMessage</p>
+                    }
+                </div>
+            }
+
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="username" class="sr-only">Username</label>
+                    <input id="username" name="username" type="text" required 
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-sakura-500 focus:border-sakura-500 focus:z-10 sm:text-sm" 
+                           placeholder="Username" />
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Password</label>
+                    <input id="password" name="password" type="password" required 
+                           class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-sakura-500 focus:border-sakura-500 focus:z-10 sm:text-sm" 
+                           placeholder="Password" />
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" 
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-sakura-500 to-sakura-600 hover:from-sakura-600 hover:to-sakura-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-sakura-500">
+                    Sign in
+                </button>
+            </div>
+        </form>
+        <div class="text-center text-sm text-gray-600">
+            <p>Default credentials: admin / Admin123!</p>
+            <p class="mt-2 text-xs text-gray-500">Password must be at least 8 characters with uppercase, lowercase, digit, and special character.</p>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - G-Hero Company</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --sakura-50: #fef1f2;
+            --sakura-100: #fde4e6;
+            --sakura-200: #fbd0d5;
+            --sakura-300: #f8b0b8;
+            --sakura-400: #f38492;
+            --sakura-500: #ea5a6f;
+            --sakura-600: #d63b54;
+            --sakura-700: #b42942;
+            --sakura-800: #97263c;
+            --sakura-900: #812539;
+            --teal-50: #f0fdfa;
+            --teal-100: #ccfbf1;
+            --teal-200: #99f6e4;
+            --teal-300: #5eead4;
+            --teal-400: #2dd4bf;
+            --teal-500: #14b8a6;
+            --teal-600: #0d9488;
+            --teal-700: #0f766e;
+            --teal-800: #115e59;
+            --teal-900: #134e4a;
+        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Noto Sans JP', 'Noto Sans', system-ui, -apple-system, sans-serif; }
+    </style>
+</head>
+<body class="bg-white">
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-sm shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16 lg:h-20">
+                <a href="#home" class="flex items-center hover:opacity-80 transition-opacity">
+                    <img src="~/assets/images/logo.webp" alt="G-Hero Company Logo" class="h-8 lg:h-10 w-auto" style="object-fit: contain;" />
+                </a>
+
+                <div class="hidden lg:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Home</a>
+                    <a href="#philosophy" class="text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Philosophy</a>
+                    <a href="#mission" class="text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Mission</a>
+                    <a href="#vision" class="text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Vision</a>
+                    <a href="#values" class="text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Core Values</a>
+                </div>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Language Switcher -->
+                    <div class="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+                        @{
+                            var currentLang = ViewBag.CurrentLanguage as string ?? "en";
+                            var returnUrl = Context.Request.Path + Context.Request.QueryString;
+                        }
+                        <form asp-controller="Home" asp-action="SetLanguage" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="language" value="en" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit" class="px-3 py-1 rounded-md text-sm font-medium transition-all @(currentLang == "en" ? "bg-white text-sakura-600 shadow-sm" : "text-gray-600 hover:text-gray-900")">
+                                EN
+                            </button>
+                        </form>
+                        <form asp-controller="Home" asp-action="SetLanguage" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="language" value="az" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit" class="px-3 py-1 rounded-md text-sm font-medium transition-all @(currentLang == "az" ? "bg-white text-sakura-600 shadow-sm" : "text-gray-600 hover:text-gray-900")">
+                                AZ
+                            </button>
+                        </form>
+                        <form asp-controller="Home" asp-action="SetLanguage" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="language" value="jp" />
+                            <input type="hidden" name="returnUrl" value="@returnUrl" />
+                            <button type="submit" class="px-3 py-1 rounded-md text-sm font-medium transition-all @(currentLang == "jp" ? "bg-white text-sakura-600 shadow-sm" : "text-gray-600 hover:text-gray-900")">
+                                日本語
+                            </button>
+                        </form>
+                    </div>
+
+                    <a href="#contact" class="hidden lg:block px-6 py-2 bg-gradient-to-r from-sakura-500 to-sakura-600 text-white rounded-full font-medium hover:shadow-lg hover:scale-105 transition-all text-sm">
+                        Contact
+                    </a>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <a href="/Dashboard" class="px-4 py-2 text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Admin</a>
+                        <form asp-controller="Account" asp-action="Logout" method="post" class="inline">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="px-4 py-2 text-gray-700 hover:text-sakura-600 transition-colors font-medium text-sm">Logout</button>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main role="main" class="pt-16 lg:pt-20">
+        @if (TempData["Success"] != null)
+        {
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+                <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">@TempData["Success"]</span>
+                </div>
+            </div>
+        }
+        @if (TempData["Error"] != null)
+        {
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4">
+                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                    <span class="block sm:inline">@TempData["Error"]</span>
+                </div>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="bg-gray-900 text-white py-12 mt-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <p>&copy; @DateTime.Now.Year G-Hero Company. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
+

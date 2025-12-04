@@ -1,79 +1,106 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useLocale } from '@/contexts/LocaleContext';
 
-export default function Hero() {
+interface HeroProps {
+  homeData?: any;
+}
+
+export default function Hero({ homeData }: HeroProps) {
   const { locale, t, getNestedTranslation } = useLocale();
   const hero = getNestedTranslation('hero');
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 lg:pt-32 pb-20 overflow-hidden">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-sakura-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob"></div>
-        <div className="absolute top-40 right-10 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-2000"></div>
-        <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-sakura-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
+    <section id="home" className="relative min-h-screen flex items-center justify-center pt-20 lg:pt-32 pb-20 overflow-hidden bg-gradient-to-br from-gray-50 via-white to-sakura-50/30">
+      {/* Professional Business Background Image */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+          alt="Professional business team collaboration"
+          fill
+          className="object-cover opacity-10"
+          priority
+          quality={90}
+        />
+        <div className="absolute inset-0 bg-gradient-to-br from-white/80 via-white/60 to-sakura-50/40"></div>
       </div>
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div className="max-w-4xl mx-auto">
-          {/* Company Name */}
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6">
-            <span className="bg-gradient-to-r from-sakura-600 via-teal-600 to-sakura-600 bg-clip-text text-transparent animate-gradient">
-              {hero.companyName}
-            </span>
-          </h1>
+      {/* Subtle decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-20 left-10 w-72 h-72 bg-sakura-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-40 right-10 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute -bottom-8 left-1/2 w-72 h-72 bg-sakura-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
 
-          {/* Tagline */}
-          <p className="text-xl md:text-2xl lg:text-3xl font-medium text-gray-800 mb-6 leading-relaxed">
-            {hero.tagline}
-          </p>
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          {/* Left Column - Content */}
+          <div className="text-center lg:text-left">
+            {/* Company Name */}
+            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-sakura-600 via-teal-600 to-sakura-600 bg-clip-text text-transparent">
+                {hero.companyName}
+              </span>
+            </h1>
 
-          {/* Description */}
-          <p className="text-lg md:text-xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed">
-            {hero.description}
-          </p>
+            {/* Tagline */}
+            <p className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900 mb-6 leading-tight">
+              {hero.tagline}
+            </p>
 
-          {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              href={`/${locale}#contact`}
-              className="px-8 py-4 bg-gradient-to-r from-sakura-500 to-sakura-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 w-full sm:w-auto"
-            >
-              {hero.ctaPrimary}
-            </Link>
-            <Link
-              href={`/${locale}#domains`}
-              className="px-8 py-4 bg-white text-sakura-600 border-2 border-sakura-500 rounded-full font-semibold text-lg hover:bg-sakura-50 hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
-            >
-              {hero.ctaSecondary}
-            </Link>
+            {/* Description */}
+            <p className="text-base md:text-lg lg:text-xl text-gray-600 mb-8 lg:mb-12 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+              {hero.description}
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+              <Link
+                href={`/${locale}#contact`}
+                className="px-8 py-4 bg-gradient-to-r from-sakura-500 to-sakura-600 text-white rounded-lg font-semibold text-base lg:text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300 w-full sm:w-auto text-center"
+              >
+                {hero.ctaPrimary}
+              </Link>
+              <Link
+                href={`/${locale}#domains`}
+                className="px-8 py-4 bg-white text-sakura-600 border-2 border-sakura-500 rounded-lg font-semibold text-base lg:text-lg hover:bg-sakura-50 hover:shadow-xl transition-all duration-300 w-full sm:w-auto text-center"
+              >
+                {hero.ctaSecondary}
+              </Link>
+            </div>
+          </div>
+
+          {/* Right Column - Professional Business Image */}
+          <div className="relative hidden lg:block">
+            <div className="relative w-full h-[500px] lg:h-[600px] rounded-2xl overflow-hidden shadow-2xl">
+              <Image
+                src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+                alt="Modern business office with technology and teamwork"
+                fill
+                className="object-cover"
+                priority
+                quality={90}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-sakura-600/20 to-transparent"></div>
+            </div>
+            {/* Decorative accent */}
+            <div className="absolute -bottom-6 -left-6 w-32 h-32 bg-teal-500 rounded-2xl opacity-20 -z-10"></div>
+            <div className="absolute -top-6 -right-6 w-24 h-24 bg-sakura-500 rounded-full opacity-20 -z-10"></div>
           </div>
         </div>
 
-        {/* Decorative illustration placeholder */}
-        <div className="mt-16 flex justify-center">
-          <div className="relative w-full max-w-4xl h-64 md:h-96">
-            <div className="absolute inset-0 bg-gradient-to-br from-sakura-100/50 to-teal-100/50 rounded-3xl backdrop-blur-sm border border-sakura-200/50"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <svg
-                className="w-64 h-64 md:w-96 md:h-96 text-sakura-300/50"
-                fill="none"
-                viewBox="0 0 400 400"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle cx="200" cy="200" r="180" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.3" />
-                <path
-                  d="M200 20 L220 80 L280 100 L260 140 L280 180 L220 200 L200 260 L180 200 L120 180 L140 140 L120 100 L180 80 Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  fill="none"
-                  opacity="0.4"
-                />
-                <circle cx="200" cy="200" r="60" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.5" />
-              </svg>
-            </div>
+        {/* Mobile Image */}
+        <div className="mt-12 lg:hidden">
+          <div className="relative w-full h-64 rounded-2xl overflow-hidden shadow-xl">
+            <Image
+              src="https://images.unsplash.com/photo-1552664730-d307ca884978?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80"
+              alt="Modern business office with technology and teamwork"
+              fill
+              className="object-cover"
+              quality={90}
+            />
           </div>
         </div>
       </div>
@@ -101,18 +128,6 @@ export default function Hero() {
         }
         .animation-delay-4000 {
           animation-delay: 4s;
-        }
-        @keyframes gradient {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        .animate-gradient {
-          background-size: 200% 200%;
-          animation: gradient 3s ease infinite;
         }
       `}</style>
     </section>

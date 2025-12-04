@@ -1,0 +1,155 @@
+// Example: How to use the API in Next.js App Router (app/page.tsx)
+'use client';
+
+import { useEffect, useState } from 'react';
+import apiClient from '../lib/api-client';
+
+export default function HomePage() {
+  const [homeData, setHomeData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const [lang, setLang] = useState('en');
+
+  useEffect(() => {
+    async function fetchHomePage() {
+      try {
+        const data = await apiClient.getHomePage(lang);
+        setHomeData(data);
+      } catch (error) {
+        console.error('Failed to fetch home page:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchHomePage();
+  }, [lang]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!homeData) {
+    return <div>Failed to load content</div>;
+  }
+
+  return (
+    <div>
+      {/* Hero Section */}
+      {homeData.hero && (
+        <section id="home" className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sakura-50 to-teal-50 pt-20">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 text-gray-900">
+              <span className="text-sakura-600">{homeData.hero.title}</span>
+            </h1>
+            {homeData.hero.subtitle && (
+              <p className="text-xl md:text-2xl text-gray-700 mb-8 max-w-3xl mx-auto">
+                {homeData.hero.subtitle}
+              </p>
+            )}
+            {homeData.hero.description && (
+              <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
+                {homeData.hero.description}
+              </p>
+            )}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              {homeData.hero.primaryButtonText && (
+                <a
+                  href={homeData.hero.primaryButtonUrl || '#contact'}
+                  className="px-8 py-4 bg-gradient-to-r from-sakura-500 to-sakura-600 text-white rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                >
+                  {homeData.hero.primaryButtonText}
+                </a>
+              )}
+              {homeData.hero.secondaryButtonText && (
+                <a
+                  href={homeData.hero.secondaryButtonUrl || '#domains'}
+                  className="px-8 py-4 bg-white text-sakura-600 border-2 border-sakura-600 rounded-full font-semibold text-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                >
+                  {homeData.hero.secondaryButtonText}
+                </a>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Philosophy Section */}
+      {homeData.philosophy && (
+        <section id="philosophy" className="py-20 lg:py-32 bg-gradient-to-b from-white to-sakura-50/30">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-white rounded-3xl shadow-lg p-8 md:p-12 lg:p-16 border border-sakura-100">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-gray-900">
+                <span className="text-sakura-600">{homeData.philosophy.title}</span>
+              </h2>
+              <div className="prose prose-lg max-w-none">
+                <p className="text-gray-700 leading-relaxed text-lg md:text-xl whitespace-pre-line">
+                  {homeData.philosophy.content}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Mission Section */}
+      {homeData.mission && (
+        <section id="mission" className="py-20 lg:py-32 bg-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+                <span className="text-teal-600">{homeData.mission.title}</span>
+              </h2>
+            </div>
+            <div className="bg-gradient-to-br from-teal-50 to-sakura-50 rounded-3xl shadow-lg p-8 md:p-12 lg:p-16 border border-teal-100">
+              <div className="max-w-3xl mx-auto text-center">
+                <p className="text-gray-700 leading-relaxed text-lg md:text-xl font-medium">
+                  {homeData.mission.content}
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* About Section */}
+      {homeData.about && (
+        <section id="about" className="py-20 lg:py-32 bg-white">
+          <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="bg-gradient-to-br from-sakura-50 to-teal-50 rounded-3xl shadow-lg p-8 md:p-12 lg:p-16 border border-sakura-100">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-8 text-gray-900 text-center">
+                <span className="text-teal-600">{homeData.about.title}</span>
+              </h2>
+              <p className="text-gray-700 leading-relaxed text-lg md:text-xl text-center max-w-3xl mx-auto">
+                {homeData.about.content}
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* Services Section */}
+      {homeData.services && homeData.services.length > 0 && (
+        <section id="services" className="py-20 lg:py-32 bg-gradient-to-b from-white to-sakura-50/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-gray-900">
+                <span className="text-sakura-600">Our Services</span>
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {homeData.services.map((service: any) => (
+                <div key={service.id} className="bg-white rounded-2xl shadow-lg p-6 border border-sakura-100">
+                  <h3 className="text-xl font-bold text-sakura-600 mb-3">{service.title}</h3>
+                  {service.description && (
+                    <p className="text-gray-700">{service.description}</p>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+

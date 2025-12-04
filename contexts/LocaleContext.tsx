@@ -22,15 +22,21 @@ export function LocaleProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   useEffect(() => {
-    const pathLocale = pathname.split('/')[1] as Locale;
-    if (locales.includes(pathLocale)) {
-      setLocaleState(pathLocale);
+    if (pathname) {
+      const pathLocale = pathname.split('/')[1] as Locale;
+      if (locales.includes(pathLocale)) {
+        setLocaleState(pathLocale);
+      }
     }
   }, [pathname]);
 
   const setLocale = (newLocale: Locale) => {
-    const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
-    router.push(`/${newLocale}${pathWithoutLocale}`);
+    if (pathname) {
+      const pathWithoutLocale = pathname.replace(`/${locale}`, '') || '/';
+      router.push(`/${newLocale}${pathWithoutLocale}`);
+    } else {
+      router.push(`/${newLocale}`);
+    }
     setLocaleState(newLocale);
   };
 

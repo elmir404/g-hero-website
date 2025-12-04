@@ -39,22 +39,25 @@ export default function Home() {
     fetchHomePage();
   }, [locale]);
 
-  if (loading) {
+  // Show loading state only on initial load
+  if (loading && !homeData) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-gray-600">Loading...</div>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-sakura-600 mx-auto mb-4"></div>
+          <div className="text-gray-600">Loading...</div>
+        </div>
       </div>
     );
   }
 
-  if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-red-600">Error: {error}</div>
-      </div>
-    );
+  // If there's an error but we have no data, show error message
+  // But still try to render with locale translations as fallback
+  if (error && !homeData) {
+    console.warn('API data unavailable, using locale translations as fallback:', error);
   }
 
+  // Always render the page - components will use locale translations if homeData is null
   return (
     <>
       <Hero homeData={homeData} />

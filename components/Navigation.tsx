@@ -45,15 +45,11 @@ export default function Navigation() {
               className="flex items-center hover:opacity-80 transition-opacity group"
               aria-label="G-Hero Company Home"
             >
-              <Image
-                src="/assets/images/logo.webp"
-                alt="G-Hero Company Logo"
-                width={150}
-                height={60}
-                className="h-8 lg:h-10 w-auto transition-transform group-hover:scale-105"
-                priority
-                style={{ objectFit: 'contain' }}
-              />
+              <div className="h-8 lg:h-10 flex items-center">
+                <span className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-sakura-600 to-teal-600 bg-clip-text text-transparent">
+                  G-Hero
+                </span>
+              </div>
             </Link>
 
             {/* Desktop Navigation */}

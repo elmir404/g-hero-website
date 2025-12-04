@@ -8,9 +8,14 @@ class ApiClient {
 
   constructor(baseUrl: string = API_BASE_URL) {
     this.baseUrl = baseUrl;
-    // Load token from localStorage or cookie
+    // Load token from localStorage or cookie (only on client)
     if (typeof window !== 'undefined') {
-      this.token = localStorage.getItem('auth_token');
+      try {
+        this.token = localStorage.getItem('auth_token');
+      } catch (e) {
+        // localStorage might not be available
+        console.warn('localStorage not available:', e);
+      }
     }
   }
 

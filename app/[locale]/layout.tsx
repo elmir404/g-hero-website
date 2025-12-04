@@ -1,17 +1,20 @@
-import { locales } from "@/i18n/config";
+import { locales, type Locale } from "@/i18n/config";
 import LocaleLayoutClient from "./layout-client";
 
 export function generateStaticParams() {
   return locales.map((locale) => ({ locale }));
 }
 
-export default function LocaleLayout({
+export default async function LocaleLayout({
   children,
-  params: { locale },
+  params,
 }: {
   children: React.ReactNode;
-  params: { locale: any };
+  params: Promise<{ locale: string }>;
 }) {
-  return <LocaleLayoutClient locale={locale}>{children}</LocaleLayoutClient>;
+  const { locale } = await params;
+  const validLocale = locales.includes(locale as Locale) ? (locale as Locale) : 'ja';
+  
+  return <LocaleLayoutClient locale={validLocale}>{children}</LocaleLayoutClient>;
 }
 

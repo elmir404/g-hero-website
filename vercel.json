@@ -1,13 +1,4 @@
 {
-    "env": {
-    
-     "NEXT_PUBLIC_API_URL":"https://tesseract2024-001-site10.rtempurl.com/api"
-    },
-    "build": {
-   
-     "NEXT_PUBLIC_API_URL":"https://tesseract2024-001-site10.rtempurl.com/api"
-      }
-    ,
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
@@ -48,7 +39,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://tesseract2024-001-site10.rtempurl.com/api/:path*"
+      "destination": "http://tesseract2024-001-site10.rtempurl.com/api/:path*"
     }
   ],
   "functions": {

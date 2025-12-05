@@ -46,9 +46,14 @@ export default function Navigation() {
               aria-label="G-Hero Company Home"
             >
               <div className="h-8 lg:h-10 flex items-center">
-                <span className="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-sakura-600 to-teal-600 bg-clip-text text-transparent">
-                  G-Hero
-                </span>
+                <Image
+                  src="/assets/images/logo.webp"
+                  alt="G-Hero Company Logo"
+                  width={120}
+                  height={40}
+                  className="h-8 lg:h-10 w-auto"
+                  style={{ objectFit: 'contain' }}
+                />
               </div>
             </Link>
 

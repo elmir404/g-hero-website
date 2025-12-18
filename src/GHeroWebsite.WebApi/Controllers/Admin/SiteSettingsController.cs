@@ -20,6 +20,24 @@ public class SiteSettingsController : ControllerBase
     }
 
     /// <summary>
+    /// Get site settings (admin only)
+    /// </summary>
+    [HttpGet]
+    public async Task<IActionResult> GetSiteSettings()
+    {
+        try
+        {
+            var settings = await _siteSettingsService.GetSiteSettingsAsync();
+            return Ok(settings);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error getting site settings");
+            return StatusCode(500, new { message = "An error occurred while retrieving site settings" });
+        }
+    }
+
+    /// <summary>
     /// Update site settings (admin only)
     /// </summary>
     [HttpPut]

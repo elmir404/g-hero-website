@@ -137,6 +137,23 @@ class ApiClient {
     });
   }
 
+  async getAdminSiteSettings() {
+    return this.request<{
+      id?: number;
+      phone?: string;
+      email?: string;
+      address?: string;
+      workingHours?: string;
+      whatsAppUrl?: string;
+      instagramUrl?: string;
+      facebookUrl?: string;
+      linkedInUrl?: string;
+      mapEmbedUrl?: string;
+    }>('/admin/site-settings', {
+      cache: 'no-store',
+    });
+  }
+
   async updateSiteSettings(data: {
     phone?: string;
     email?: string;

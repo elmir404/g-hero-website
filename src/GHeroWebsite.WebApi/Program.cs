@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,10 +51,11 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowNextJs", policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "http://localhost:3001")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy.WithOrigins("http://localhost:3000", "http://localhost:3001", "https://localhost:5001", "https://g-hero.jp")
+              .AllowAnyHeader() // This includes Authorization header
+              .AllowAnyMethod() // This includes GET, POST, etc.
+              .AllowCredentials() // Important for cookies, but also needed for Authorization header in some cases
+              .WithExposedHeaders("Content-Disposition"); // Expose any additional headers if needed
     });
 });
 
@@ -98,7 +101,107 @@ builder.Services.AddAuthentication(options =>
         ValidateAudience = true,
         ValidAudience = jwtAudience,
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
+        ClockSkew = TimeSpan.FromMinutes(5), // Allow 5 minutes clock skew
+        RoleClaimType = ClaimTypes.Role,
+        NameClaimType = ClaimTypes.Name
+    };
+    
+    // Configure token extraction - handle both Authorization header and query string
+    options.Events = new JwtBearerEvents
+    {
+        OnMessageReceived = context =>
+        {
+            // Log what we're receiving
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+            var authHeader = context.Request.Headers["Authorization"].ToString();
+            var path = context.Request.Path;
+            
+            logger.LogInformation("JWT MessageReceived - Path: {Path}, HasAuthHeader: {HasAuth}, AuthHeader: {AuthHeader}", 
+                path, !string.IsNullOrEmpty(authHeader), string.IsNullOrEmpty(authHeader) ? "None" : authHeader.Substring(0, Math.Min(50, authHeader.Length)) + "...");
+            
+            // Handle token extraction manually if needed
+            if (!string.IsNullOrEmpty(authHeader))
+            {
+                // Check if it starts with "Bearer "
+                if (authHeader.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                {
+                    // Extract token after "Bearer "
+                    var token = authHeader.Substring("Bearer ".Length).Trim();
+                    context.Token = token;
+                    logger.LogInformation("Token extracted from Bearer header");
+                }
+                else
+                {
+                    // Token is sent without "Bearer " prefix - use the entire header value
+                    context.Token = authHeader.Trim();
+                    logger.LogInformation("Token extracted from header without Bearer prefix");
+                }
+            }
+            
+            // Also check query string as fallback (optional, for debugging)
+            var queryToken = context.Request.Query["access_token"];
+            if (!string.IsNullOrEmpty(queryToken) && string.IsNullOrEmpty(context.Token))
+            {
+                context.Token = queryToken;
+                logger.LogInformation("Token found in query string");
+            }
+            
+            return Task.CompletedTask;
+        },
+        OnAuthenticationFailed = context =>
+        {
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+            logger.LogError(context.Exception, 
+                "JWT Authentication failed - Path: {Path}, Error: {Error}", 
+                context.Request.Path, 
+                context.Exception?.Message);
+            
+            // Log more details about the exception
+            if (context.Exception is SecurityTokenExpiredException)
+            {
+                logger.LogError("Token expired");
+            }
+            else if (context.Exception is SecurityTokenInvalidSignatureException)
+            {
+                logger.LogError("Token signature invalid");
+            }
+            else if (context.Exception is SecurityTokenInvalidAudienceException)
+            {
+                logger.LogError("Token audience invalid");
+            }
+            else if (context.Exception is SecurityTokenInvalidIssuerException)
+            {
+                logger.LogError("Token issuer invalid");
+            }
+            
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+            var userName = context.Principal?.Identity?.Name;
+            var roles = context.Principal?.FindAll(ClaimTypes.Role)?.Select(c => c.Value).ToList() ?? new List<string>();
+            logger.LogInformation("JWT Token validated successfully - User: {User}, Roles: {Roles}", 
+                userName, string.Join(", ", roles));
+            return Task.CompletedTask;
+        },
+        OnChallenge = context =>
+        {
+            var logger = context.HttpContext.RequestServices.GetRequiredService<ILogger<Program>>();
+            var authHeader = context.Request.Headers["Authorization"].ToString();
+            logger.LogWarning("JWT Challenge issued - Path: {Path}, Error: {Error}, ErrorDescription: {ErrorDescription}, HasAuthHeader: {HasAuth}", 
+                context.Request.Path,
+                context.Error, 
+                context.ErrorDescription,
+                !string.IsNullOrEmpty(authHeader));
+            
+            // Ensure we return 401 with proper challenge
+            context.HandleResponse();
+            context.Response.StatusCode = 401;
+            context.Response.ContentType = "application/json";
+            var errorResponse = JsonSerializer.Serialize(new { error = "Unauthorized", message = "Authentication required" });
+            return context.Response.WriteAsync(errorResponse);
+        }
     };
 });
 
@@ -110,6 +213,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<IHomePageService, HomePageService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISiteSettingsService, SiteSettingsService>();
 
 var app = builder.Build();
 
@@ -122,8 +226,10 @@ if (app.Environment.IsDevelopment())
 app.UseSwaggerUI();
 app.UseHttpsRedirection();
 
+// IMPORTANT: CORS must come before Authentication and Authorization
 app.UseCors("AllowNextJs");
 
+// Authentication must come before Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 

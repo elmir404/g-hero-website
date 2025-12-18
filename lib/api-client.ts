@@ -50,6 +50,8 @@ class ApiClient {
     const response = await fetch(url, {
       ...options,
       headers,
+      cache: options.cache || 'default',
+      next: options.next,
     });
 
     if (!response.ok) {
@@ -117,6 +119,41 @@ class ApiClient {
     );
   }
 
+  // Site Settings API
+  async getSiteSettings() {
+    return this.request<{
+      id?: number;
+      phone?: string;
+      email?: string;
+      address?: string;
+      workingHours?: string;
+      whatsAppUrl?: string;
+      instagramUrl?: string;
+      facebookUrl?: string;
+      linkedInUrl?: string;
+      mapEmbedUrl?: string;
+    }>('/public/site-settings', {
+      cache: 'no-store', // Always fetch fresh
+    });
+  }
+
+  async updateSiteSettings(data: {
+    phone?: string;
+    email?: string;
+    address?: string;
+    workingHours?: string;
+    whatsAppUrl?: string;
+    instagramUrl?: string;
+    facebookUrl?: string;
+    linkedInUrl?: string;
+    mapEmbedUrl?: string;
+  }) {
+    return this.request<any>('/admin/site-settings', {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
   // Auth API
   async login(username: string, password: string) {
     const response = await this.request<{
@@ -151,18 +188,29 @@ class ApiClient {
   }
 
   // Admin API - Contact Messages
-  async getContactMessages(page: number = 1, pageSize: number = 20) {
+  async getContactMessages(page: number = 1, pageSize: number = 20, q?: string, status?: string) {
+    const params = new URLSearchParams({
+      page: page.toString(),
+      pageSize: pageSize.toString(),
+    });
+    if (q) params.append('q', q);
+    if (status) params.append('status', status);
+    
     return this.request<{
       data: any[];
       total: number;
       page: number;
       pageSize: number;
       totalPages: number;
-    }>(`/admin/contact?page=${page}&pageSize=${pageSize}`);
+    }>(`/admin/contact?${params.toString()}`, {
+      cache: 'no-store', // Always fetch fresh
+    });
   }
 
   async getUnreadMessages() {
-    return this.request<{ data: any[]; count: number }>('/admin/contact/unread');
+    return this.request<{ data: any[]; count: number }>('/admin/contact/unread', {
+      cache: 'no-store', // Always fetch fresh
+    });
   }
 
   async getContactMessage(id: number) {

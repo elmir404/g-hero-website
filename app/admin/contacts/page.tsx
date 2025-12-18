@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import apiClient from '@/lib/api-client';
 
+// Force dynamic rendering - no caching
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 // Uncomment to enable API testing
 // import TestApi from './test-api';
 
@@ -42,12 +46,14 @@ export default function ContactMessagesPage() {
       console.log('Loading messages...', { filter, page, pageSize });
       
       if (filter === 'unread') {
+        // Force fresh fetch with cache bypass
         const response = await apiClient.getUnreadMessages();
         console.log('Unread messages response:', response);
         setMessages(response.data || []);
         setTotal(response.count || 0);
         setTotalPages(1);
       } else {
+        // Force fresh fetch with cache bypass
         const response = await apiClient.getContactMessages(page, pageSize);
         console.log('All messages response:', response);
         setMessages(response.data || []);

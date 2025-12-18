@@ -2,16 +2,19 @@ using GHeroWebsite.Application.DTOs;
 using GHeroWebsite.Domain.Entities;
 using GHeroWebsite.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace GHeroWebsite.Application.Services;
 
 public class ContactService : IContactService
 {
     private readonly ApplicationDbContext _context;
+    private readonly ILogger<ContactService> _logger;
 
-    public ContactService(ApplicationDbContext context)
+    public ContactService(ApplicationDbContext context, ILogger<ContactService> logger)
     {
         _context = context;
+        _logger = logger;
     }
 
     public async Task<int> CreateContactAsync(ContactRequestDto contactDto)
@@ -29,6 +32,10 @@ public class ContactService : IContactService
 
         _context.Contacts.Add(contact);
         await _context.SaveChangesAsync();
+        
+        // Log successful creation (ID only for security)
+        _logger.LogInformation("Contact message created successfully. ID: {ContactId}", contact.Id);
+        
         return contact.Id;
     }
 
@@ -39,9 +46,13 @@ public class ContactService : IContactService
 
     public async Task<IEnumerable<Contact>> GetAllContactsAsync()
     {
-        return await _context.Contacts
+        var contacts = await _context.Contacts
             .OrderByDescending(c => c.CreatedAt)
             .ToListAsync();
+        
+        _logger.LogInformation("Retrieved {Count} contact messages from database", contacts.Count());
+        
+        return contacts;
     }
 
     public async Task<IEnumerable<Contact>> GetUnreadContactsAsync()

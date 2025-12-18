@@ -30,7 +30,9 @@ public class ContactController : ControllerBase
 
         try
         {
+            _logger.LogInformation("Contact form submission received from: {Email}", request.Email);
             var contactId = await _contactService.CreateContactAsync(request);
+            _logger.LogInformation("Contact form submitted successfully. ID: {ContactId}", contactId);
             return Ok(new { 
                 success = true, 
                 message = "Thank you for your message! We will get back to you soon.",
@@ -39,7 +41,7 @@ public class ContactController : ControllerBase
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error submitting contact form");
+            _logger.LogError(ex, "Error submitting contact form from: {Email}", request.Email);
             return StatusCode(500, new { 
                 success = false, 
                 message = "An error occurred while submitting your message. Please try again later." 

@@ -38,9 +38,11 @@ public class AuthService : IAuthService
         // Update last login
         await _userService.UpdateLastLoginAsync(user.Id);
 
-        // Generate JWT token
-        var token = GenerateJwtToken(user);
+        // Get roles before generating token
         var roles = await _userManager.GetRolesAsync(user);
+
+        // Generate JWT token with roles
+        var token = GenerateJwtToken(user, roles);
 
         return new LoginResponseDto
         {
@@ -80,20 +82,23 @@ public class AuthService : IAuthService
         }
     }
 
-    private string GenerateJwtToken(ApplicationUser user)
+    private string GenerateJwtToken(ApplicationUser user, IList<string> roles)
     {
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
             new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
             new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new Claim(JwtRegisteredClaimNames.Sub, user.UserName ?? string.Empty),
+            new Claim(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty)
         };
 
-        var roles = _userManager.GetRolesAsync(user).Result;
+        // Add role claims - using both ClaimTypes.Role and "role" claim type for compatibility
         foreach (var role in roles)
         {
             claims.Add(new Claim(ClaimTypes.Role, role));
+            claims.Add(new Claim("role", role)); // JWT standard claim
         }
 
         var key = Encoding.UTF8.GetBytes(_configuration["Jwt:Key"] ?? throw new InvalidOperationException("JWT Key not configured"));
@@ -104,6 +109,7 @@ public class AuthService : IAuthService
             audience: _configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddDays(7),
+            notBefore: DateTime.UtcNow,
             signingCredentials: signingCredentials
         );
 

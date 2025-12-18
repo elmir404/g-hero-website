@@ -23,9 +23,38 @@ public class ContactMessagesController : ControllerBase
     /// Get all contact messages
     /// </summary>
     [HttpGet]
-    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    public async Task<IActionResult> GetAll([FromQuery] int page = 1, [FromQuery] int pageSize = 20, [FromQuery] string? q = null, [FromQuery] string? status = null)
     {
+        _logger.LogInformation("Admin retrieving contact messages - Page: {Page}, PageSize: {PageSize}, Query: {Query}, Status: {Status}", 
+            page, pageSize, q, status);
+        
         var contacts = await _contactService.GetAllContactsAsync();
+        
+        // Apply search filter if provided
+        if (!string.IsNullOrEmpty(q))
+        {
+            var searchLower = q.ToLowerInvariant();
+            contacts = contacts.Where(c => 
+                c.Name.ToLowerInvariant().Contains(searchLower) ||
+                c.Email.ToLowerInvariant().Contains(searchLower) ||
+                (c.Subject != null && c.Subject.ToLowerInvariant().Contains(searchLower)) ||
+                (c.Company != null && c.Company.ToLowerInvariant().Contains(searchLower)) ||
+                c.Message.ToLowerInvariant().Contains(searchLower));
+        }
+        
+        // Apply status filter if provided
+        if (!string.IsNullOrEmpty(status))
+        {
+            if (status.ToLowerInvariant() == "read")
+            {
+                contacts = contacts.Where(c => c.IsRead);
+            }
+            else if (status.ToLowerInvariant() == "unread")
+            {
+                contacts = contacts.Where(c => !c.IsRead);
+            }
+        }
+        
         var total = contacts.Count();
         var pagedContacts = contacts
             .Skip((page - 1) * pageSize)
@@ -43,6 +72,9 @@ public class ContactMessagesController : ControllerBase
                 ReadAt = c.ReadAt
             })
             .ToList();
+
+        _logger.LogInformation("Admin retrieved {Count} contact messages (page {Page} of {TotalPages})", 
+            pagedContacts.Count, page, (int)Math.Ceiling(total / (double)pageSize));
 
         return Ok(new
         {

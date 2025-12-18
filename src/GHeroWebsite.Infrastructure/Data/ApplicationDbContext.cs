@@ -19,6 +19,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<HomeTestimonial> HomeTestimonials { get; set; }
     public DbSet<HomeFaq> HomeFaqs { get; set; }
     public DbSet<HomeContactInfo> HomeContactInfos { get; set; }
+    public DbSet<SiteSettings> SiteSettings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -137,6 +138,25 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.CreatedAt).IsRequired();
             entity.Property(e => e.UpdatedAt).IsRequired();
             entity.HasIndex(e => new { e.LanguageCode, e.IsActive });
+        });
+
+        // SiteSettings entity configuration (single row table)
+        modelBuilder.Entity<SiteSettings>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Phone).HasMaxLength(50);
+            entity.Property(e => e.Email).HasMaxLength(200);
+            entity.Property(e => e.Address).HasMaxLength(500);
+            entity.Property(e => e.WorkingHours).HasMaxLength(200);
+            entity.Property(e => e.WhatsAppUrl).HasMaxLength(500);
+            entity.Property(e => e.InstagramUrl).HasMaxLength(500);
+            entity.Property(e => e.FacebookUrl).HasMaxLength(500);
+            entity.Property(e => e.LinkedInUrl).HasMaxLength(500);
+            entity.Property(e => e.MapEmbedUrl).HasMaxLength(1000);
+            entity.Property(e => e.UpdatedAt).IsRequired();
+            
+            // Ensure only one row exists
+            entity.HasIndex(e => e.Id).IsUnique();
         });
     }
 }

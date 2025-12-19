@@ -263,19 +263,19 @@ using (var scope = app.Services.CreateScope())
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
     var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
     
-    var adminExists = await userService.GetUserByUsernameAsync("admin");
+    var adminExists = await userService.GetUserByUsernameAsync("gheroadmin");
     if (adminExists == null)
     {
         var adminUser = new ApplicationUser
         {
-            UserName = "admin",
-            Email = "admin@g-hero-company.com",
-            FullName = "Administrator",
+            UserName = "gheroadmin",
+            Email = "admin@g-hero.jp",
+            FullName = "Adminstrator",
             CreatedAt = DateTime.UtcNow,
             EmailConfirmed = true
         };
         
-        var result = await userManager.CreateAsync(adminUser, "Admin123!");
+        var result = await userManager.CreateAsync(adminUser, "Ghero345!");
         if (result.Succeeded)
         {
             await userManager.AddToRoleAsync(adminUser, "Admin");

@@ -13,6 +13,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const [user, setUser] = useState<{ username: string; email: string; roles: string[] } | null>(null);
 
   useEffect(() => {
+    // Skip auth check on login page
+    if (pathname === '/admin/login') {
+      setLoading(false);
+      setIsAuthenticated(false);
+      return;
+    }
+
     async function checkAuth() {
       try {
         const userData = await apiClient.getCurrentUser();
@@ -20,9 +27,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         setIsAuthenticated(true);
       } catch {
         setIsAuthenticated(false);
-        if (pathname !== '/admin/login') {
-          router.push('/admin/login');
-        }
+        router.push('/admin/login');
       } finally {
         setLoading(false);
       }
